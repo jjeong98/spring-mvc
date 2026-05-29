@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 // DB 테이블과 1:1로 매칭되는 필드를 선언
 @Getter
 //@Setter <- Entity에서 Setter는 권장하지 않습니다. 필요한 필드에만 선택적으로 생성합니다.
-@NoArgsConstructor
 @AllArgsConstructor
 public class Post {
 
@@ -25,6 +24,21 @@ public class Post {
     private String thumbnailPath;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public Post() {
+        this.viewCount = 0;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public Post(String title, String content, String author, Category category) {
+        this();
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.category = category;
+    }
+
 
     // Lombok의 setter는 완전 기본형, 커스텀을 원한다면 직접 setter를 구축하세요.
     public void setViewCount() {

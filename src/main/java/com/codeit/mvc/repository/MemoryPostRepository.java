@@ -2,12 +2,14 @@ package com.codeit.mvc.repository;
 
 import com.codeit.mvc.domain.Category;
 import com.codeit.mvc.domain.Post;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
+@Repository
 public class MemoryPostRepository implements PostRepository {
 
     // ConcurrentHashMap: 멀티 스레드 환경에서 안전한 HashMap (여러 스레드에서 하나의 Map을 공유할 수 있음)
