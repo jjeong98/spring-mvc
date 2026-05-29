@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Post {
 
+    @Setter
     private Long id;
     private String title;
     private String content;
@@ -25,4 +26,8 @@ public class Post {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    // Lombok의 setter는 완전 기본형, 커스텀을 원한다면 직접 setter를 구축하세요.
+    public void setViewCount() {
+        this.viewCount++;
+    }
 }
