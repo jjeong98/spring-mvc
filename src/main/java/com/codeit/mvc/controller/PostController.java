@@ -4,12 +4,14 @@ import com.codeit.mvc.domain.Category;
 import com.codeit.mvc.domain.Post;
 import com.codeit.mvc.dto.request.PostRequest;
 import com.codeit.mvc.dto.response.PostResponse;
+import com.codeit.mvc.service.FileService;
 import com.codeit.mvc.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final FileService fileService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String list(Model model) {
@@ -40,8 +43,12 @@ public class PostController {
     }
 
     @PostMapping
-    public String create(PostRequest postRequest, Model model) {
+    public String create(PostRequest postRequest, @RequestParam(value = "thumbnail", required = false) MultipartFile file, Model model) {
         log.info("/posts: Post, 전달된 값: {}", postRequest);
+
+        if (file != null && !file.isEmpty()) {
+            String fileName = fileService.saveFile(file);
+        }
         Post post = postService.createPost(postRequest);
 
         // redirect: 재요청

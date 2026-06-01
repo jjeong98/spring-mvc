@@ -30,12 +30,13 @@ public class Post {
     }
 
 @Builder
-    public Post(String title, String content, String author, Category category) {
+    public Post(String title, String content, String author, Category category,String thumbnailPath) {
         this();
         this.title = title;
         this.content = content;
         this.author = author;
         this.category = category;
+        this.thumbnailPath = thumbnailPath;
     }
 
     // Lombok의 setter는 완전 기본형, 커스텀을 원한다면 직접 setter를 구축하세요.
