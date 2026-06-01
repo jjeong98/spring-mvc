@@ -46,7 +46,7 @@ public class FileService {
                 file.getOriginalFilename() == null ? "unknown" : file.getOriginalFilename()
         );
 
-        int dotIndex = originFileName.lastIndexOf(" . ");
+        int dotIndex = originFileName.lastIndexOf(".");
         String extension = (dotIndex >=0)  ? originFileName.substring(dotIndex).toLowerCase(): "";
 
         // 확장자 검증
