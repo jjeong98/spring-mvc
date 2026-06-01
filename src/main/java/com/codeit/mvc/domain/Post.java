@@ -29,6 +29,7 @@ public class Post {
         this.updatedAt = LocalDateTime.now();
     }
 
+@Builder
     public Post(String title, String content, String author, Category category) {
         this();
         this.title = title;

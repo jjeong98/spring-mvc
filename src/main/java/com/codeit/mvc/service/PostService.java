@@ -1,7 +1,9 @@
 package com.codeit.mvc.service;
 
+import com.codeit.mvc.domain.Category;
 import com.codeit.mvc.domain.Post;
 import com.codeit.mvc.dto.request.PostRequest;
+import com.codeit.mvc.dto.response.PostResponse;
 import com.codeit.mvc.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,24 +27,55 @@ public class PostService {
     }
 
     public Post createPost(PostRequest postRequest) {
-        Post post = new Post(
-                postRequest.getTitle(),
-                postRequest.getContent(),
-                postRequest.getAuthor(),
-                postRequest.getCategory()
-        );
+        Post post = Post.builder()
+                .author(postRequest.getAuthor())
+                .title(postRequest.getTitle())
+                .content(postRequest.getContent())
+                .category(postRequest.getCategory())
+                .build();
 
         return postRepository.save(post);
     }
 
-    public void getPostById(Long id) {
+    public PostResponse getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
         post.setViewCount();
+        return PostResponse.from(post);
+    }
+
+
+    public List<PostResponse> searchPost(String keyword, Category category, String sort) {
+
+        // 지금은 DB가 없기 때문에 Java 문법으로 조건부 탐색과 정렬 기준을 직접 작성하고 있지만
+        // 추후에는 DB한테 SQL로 명령을 내릴 겁니다.
+        List<Post> posts;
+
+        if (category != null) {
+            posts = postRepository.findByCategory(category);
+        } else if (keyword != null && !keyword.trim().isEmpty()) {
+            posts = postRepository.findByTitleOrContentContaining(keyword);
+        } else {
+            posts = postRepository.findAll();
+        }
+
+        // 정렬
+        if ("viewCount".equals(sort)) {
+            posts = posts.stream()
+                    .sorted(Comparator.comparing(Post::getViewCount).reversed())
+                    .collect(Collectors.toList());
+        } else {
+            posts = posts.stream()
+                    .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                    .collect(Collectors.toList());
+        }
+
+        return posts.stream()
+                .map(PostResponse::from)
+                .collect(Collectors.toList());
 
     }
 }
-
 
 
 
